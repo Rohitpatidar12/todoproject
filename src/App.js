@@ -6,6 +6,7 @@ import { useState } from 'react';
 var count = 1
 function App() {
 
+  const [editingFlag, setEditingFlag] = useState(-1)
   var [todo, setTodo] = useState([
     {
       id: count++,
@@ -60,21 +61,38 @@ function App() {
     })
     setTodo([...todo])
   }
-  const checkedChange = (id) =>
-  {
-    console.log("checkedChange id:",id)
-    todo.map(todoTemp =>
-      {
-        if(id === todoTemp.id)
-        {
-          //update Complted property
-          todoTemp.completed = !todoTemp.completed
-        }
-        return todoTemp
-      })
-      setTodo([...todo])
+  const checkedChange = (id) => {
+    console.log("checkedChange id:", id)
+    todo.map(todoTemp => {
+      if (id === todoTemp.id) {
+        //update Complted property
+        todoTemp.completed = !todoTemp.completed
+      }
+      return todoTemp
+    })
+    setTodo([...todo])
   }
 
+  const editTodo = (id) => {
+    console.log("edit todo")
+    setEditingFlag(id)
+  }
+
+  const saveEditedTodo = (id) =>
+  {
+    console.log("saveEditedTodo")
+    let updatedTodoText = document.getElementById("editingTodo").value
+   todo.map(todoTemp =>
+    {
+      if(todoTemp.id === id)
+      {
+        todoTemp.title = updatedTodoText
+      }
+      return todoTemp          
+      })
+      setTodo([...todo])
+      setEditingFlag(-1)    
+  }
 
   return (
     <div>
@@ -84,27 +102,42 @@ function App() {
       {todo.map(todoTemp => {
         //console.log("tempTodo:"+tempTodo)
         return <div key={todoTemp.id}>
-          {todoTemp.completed === true ?//condition
-           <> <input type='checkbox' onChange={()=> checkedChange(todoTemp.id)} checked /><s>{todoTemp.title}</s></>://if execution
-            <><input type='checkbox' onChange={()=> checkedChange(todoTemp.id)} />{todoTemp.title}</>
+        { 
+          todoTemp.completed === true ?// condition
+          <> 
+            <input type='checkbox' onChange={()=>checkedChange(todoTemp.id)} checked/> 
+            <s> {todoTemp.title} </s>
+          </>: //if execution
+          <>
+            <input type='checkbox' onChange={()=>checkedChange(todoTemp.id)}/>
+            {
+              editingFlag === todoTemp.id ?
+              <>
+                <input type='text' id='editingTodo' defaultValue={todoTemp.title}/>
+                <button onClick={()=>deleteTodo(todoTemp.id)}>Delete</button>
+                <button onClick={()=>saveEditedTodo(todoTemp.id)}>Save</button>
+              </> :
+              <>
+                {todoTemp.title}
+                <button onClick={()=>deleteTodo(todoTemp.id)}>Delete</button>
+                <button onClick={()=>editTodo(todoTemp.id)}>Edit</button> </>//else execution
             }
-          
-          <button onClick={() => deleteTodo(todoTemp.id)}>Delete</button>
+          </>        
+        }
         </div>
-      })
-      }
-      {/* {getDynamicList()} */}
-    </div>
+    })}
+    {/* getDyanamicList()*/}
+   </div>
   );
 }
 export default App;
 
 /* Edit to do algorithm
-0. Introduce an editing flag state with default value of -1
-1. Edit button to be added for all items
-2. Function to handle edit button click
-  - Update editing flag with id
-  - Frontend Map - update frontend to show input for editing todo
+--0. Introduce an editing flag state with default value of -1
+--1. Edit button to be added for all items
+--2. Function to handle edit button click
+  --- Update editing flag with id
+  --- Frontend Map - update frontend to show input for editing todo
 3. Show text in input
 4. Show a save button
 5. Hide the edit button
