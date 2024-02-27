@@ -1,12 +1,14 @@
 
 import './App.css';
-import { useState } from 'react';
+import { useState } from 'react'
+import TodoListItem from './TodoListItem';
 
 
 var count = 1
 function App() {
 
   const [editingFlag, setEditingFlag] = useState(-1)
+  const [selectedFilter,setSelectedFilter] = useState("incomplete")
   var [todo, setTodo] = useState([
     {
       id: count++,
@@ -94,37 +96,84 @@ function App() {
       setEditingFlag(-1)    
   }
 
-  return (
-    <div>
-      <h1>Todo App</h1>
+  const handleFilter = (filterType) =>
+  {
+    // console.log("Filter Clicked",filterType)
+    switch(filterType)
+    {
+      case "incomplete":
+        console.log("incomplete executed")
+        setSelectedFilter("incomplete")
+      break;
+
+      case "complted":
+        console.log("complete executed")
+        setSelectedFilter("complete")
+      break;
+
+      case "all":
+        console.log("all executed")
+        setSelectedFilter("all")
+      break;
+      default:        
+    }
+  }
+
+  // const divStyle ={
+  //   backgroundColor:"#5cf785",
+  //     margin:"10px",
+  //     padding:"10px"
+  //  }
+  return (    
+    // background-color
+    // <div style={divStyle}
+    <div id='parentDiv'
+        //   {backgroundColor:"#5cf785", inliine css
+        // margin:"10px",
+        // padding:"10px"
+      //}
+   // }
+   >
+      <h1 className='header'>Todo App</h1>
+      <div>
+        <label onClick={()=>handleFilter("incomplete")}>Incomplete</label> | 
+        <label onClick={()=>handleFilter("complted")}>Complted</label> | 
+        <label onClick={()=>handleFilter("all")}>All</label>
+      </div>
+
       <input id='todoInput' type='text' placeholder='Add your todo here...' />
       <button onClick={addTodo}>Add</button><br />
       {todo.map(todoTemp => {
+           switch(selectedFilter)
+           {
+              case "incomplete":
+               if(!todoTemp.completed)
+                {
+
+                }
+               break;
+
+              case "complted":
+              if(todoTemp.completed)
+              {
+
+               }
+              break;
+
+             case "all":
+       
+              break;
+              default:   
+
+           }
         //console.log("tempTodo:"+tempTodo)
-        return <div key={todoTemp.id}>
-        { 
-          todoTemp.completed === true ?// condition
-          <> 
-            <input type='checkbox' onChange={()=>checkedChange(todoTemp.id)} checked/> 
-            <s> {todoTemp.title} </s>
-          </>: //if execution
-          <>
-            <input type='checkbox' onChange={()=>checkedChange(todoTemp.id)}/>
-            {
-              editingFlag === todoTemp.id ?
-              <>
-                <input type='text' id='editingTodo' defaultValue={todoTemp.title}/>
-                <button onClick={()=>deleteTodo(todoTemp.id)}>Delete</button>
-                <button onClick={()=>saveEditedTodo(todoTemp.id)}>Save</button>
-              </> :
-              <>
-                {todoTemp.title}
-                <button onClick={()=>deleteTodo(todoTemp.id)}>Delete</button>
-                <button onClick={()=>editTodo(todoTemp.id)}>Edit</button> </>//else execution
-            }
-          </>        
-        }
-        </div>
+        return<TodoListItem
+        todoTemp={todoTemp}
+        editingFlag={editingFlag}
+        checkedChange={checkedChange}
+        deleteTodo={deleteTodo}
+        saveEditedTodo={saveEditedTodo}
+        editTodo={editTodo}/>
     })}
     {/* getDyanamicList()*/}
    </div>
@@ -144,5 +193,15 @@ export default App;
 6. Handle save button to save the title of todo and update the list
   - Update diting flag with default value
 
+*/
 
+
+
+/* 
+todotemp
+editingFlag
+checkedChange
+deleteTodo
+saveEditedTodo
+editTodo
 */
