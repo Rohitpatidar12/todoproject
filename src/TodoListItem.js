@@ -1,6 +1,8 @@
+import './TodoListItem.css'
+
 const TodoListItem = (props) =>
 {
-    return<div key={props.todoTemp.id}>
+    return<div id="todoListItem" key={props.todoTemp.id}>
     { 
       props.todoTemp.completed === true ?// condition
       <> 

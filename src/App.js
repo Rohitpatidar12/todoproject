@@ -106,9 +106,9 @@ function App() {
         setSelectedFilter("incomplete")
       break;
 
-      case "complted":
+      case "completed":
         console.log("complete executed")
-        setSelectedFilter("complete")
+        setSelectedFilter("completed")
       break;
 
       case "all":
@@ -137,43 +137,53 @@ function App() {
       <h1 className='header'>Todo App</h1>
       <div>
         <label onClick={()=>handleFilter("incomplete")}>Incomplete</label> | 
-        <label onClick={()=>handleFilter("complted")}>Complted</label> | 
+        <label onClick={()=>handleFilter("completed")}>Complted</label> | 
         <label onClick={()=>handleFilter("all")}>All</label>
       </div>
 
       <input id='todoInput' type='text' placeholder='Add your todo here...' />
       <button onClick={addTodo}>Add</button><br />
-      {todo.map(todoTemp => {
+      {todo.map(todoTemp => 
+      {
            switch(selectedFilter)
            {
               case "incomplete":
                if(!todoTemp.completed)
                 {
-
+                  return<TodoListItem
+                  todoTemp={todoTemp}
+                  editingFlag={editingFlag}
+                  checkedChange={checkedChange}
+                  deleteTodo={deleteTodo}
+                  saveEditedTodo={saveEditedTodo}
+                  editTodo={editTodo}/>
                 }
                break;
-
-              case "complted":
-              if(todoTemp.completed)
-              {
-
-               }
-              break;
-
-             case "all":
-       
-              break;
-              default:   
+               case "completed":
+               if(todoTemp.completed)
+                {
+                 return<TodoListItem
+                 todoTemp={todoTemp}
+                 editingFlag={editingFlag}
+                 checkedChange={checkedChange}
+                 deleteTodo={deleteTodo}
+                 saveEditedTodo={saveEditedTodo}
+                 editTodo={editTodo}/>
+                }
+                 break;
+                 case "all":
+                 return<TodoListItem
+                 todoTemp={todoTemp}
+                 editingFlag={editingFlag}
+                 checkedChange={checkedChange}
+                 deleteTodo={deleteTodo}
+                 saveEditedTodo={saveEditedTodo}
+                 editTodo={editTodo}/>                       
+                 default:                 
 
            }
         //console.log("tempTodo:"+tempTodo)
-        return<TodoListItem
-        todoTemp={todoTemp}
-        editingFlag={editingFlag}
-        checkedChange={checkedChange}
-        deleteTodo={deleteTodo}
-        saveEditedTodo={saveEditedTodo}
-        editTodo={editTodo}/>
+        
     })}
     {/* getDyanamicList()*/}
    </div>
